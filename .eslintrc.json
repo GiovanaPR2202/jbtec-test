@@ -1,10 +1,26 @@
 {
     "extends": ["airbnb-base", "plugin:prettier/recommended"],
-    "plugins": ["prettier"],
+    "plugins": ["@typescript-eslint", "prettier", "markdown"],
+    "parser": "@typescript-eslint/parser",
     "rules": {
       "prettier/prettier": ["error", {
         "tabWidth": 4
       }]
-    }
-  }
+    },
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module"
+    },
+    "overrides": [
+      {
+        "files": ["*.md"],
+        "processor": "markdown/markdown"
+      },
+      {
+        "files": ["*.json"],
+        "parser": "jsonc-eslint-parser"
+      }
+    ]
+  
+}
   
