@@ -14,7 +14,33 @@ setTimeout(() => resolve(Math.floor(delay / 100)), delay);
 type Task = () => Promise<number>;
 
 const throttle = async (workers: number, tasks: Task[]) => {
-// implemente aqui
+    const results: number[] = [];
+    const runningTasks: Promise<void>[] = [];
+    let currentIndex = 0;
+
+    const runTask = async () => {
+        const taskIndex = currentIndex++;
+        if (taskIndex >= tasks.length) return;
+
+        const task = tasks[taskIndex];
+        const result = await task();
+        results.push(result);
+
+        
+        if (currentIndex < tasks.length) {
+            await runTask();
+        }
+    };
+
+    
+    for (let i = 0; i < Math.min(workers, tasks.length); i++) {
+        runningTasks.push(runTask());
+    }
+
+    
+    await Promise.all(runningTasks);
+    
+    return results;
 };
 
 const bootstrap = async () => {
